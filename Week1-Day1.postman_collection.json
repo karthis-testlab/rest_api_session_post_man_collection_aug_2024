@@ -1,0 +1,321 @@
+{
+	"info": {
+		"_postman_id": "83bcb3e4-3a7e-4042-b100-03526d0d318a",
+		"name": "Week1-Day1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28447185"
+	},
+	"item": [
+		{
+			"name": "Get_All_Incidents",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var jsonArray = pm.response.json().result;\r",
+							"console.log(jsonArray.length);\r",
+							"for(var i = 0; i < jsonArray.length; i++) {\r",
+							"    console.log(jsonArray[i].sys_created_by);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{protocol}}://{{domaiName}}.service-now.com/api/now/table/incident",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{domaiName}}",
+						"service-now",
+						"com"
+					],
+					"path": [
+						"api",
+						"now",
+						"table",
+						"incident"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get_All_Incidents_By_Query",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Vaildate we're getting only hardware category\", function () {\r",
+							"    var jsonArray = pm.response.json().result;   \r",
+							"    for(var i = 0; i < jsonArray.length; i++) {\r",
+							"        console.log(jsonArray[i].category);\r",
+							"        console.log(jsonArray[i].number);        number\r",
+							"        pm.expect(jsonArray[i].category).to.eql(\"hardware\");\r",
+							"    }\r",
+							"}); \r",
+							"pm.test(\"Vaildate the size of the software record\", function() {\r",
+							"    var jsonArray = pm.response.json().result;\r",
+							"    pm.expect(jsonArray.length).greaterThan(1);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "vW0eDfd+A0V-",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{protocol}}://{{domaiName}}.service-now.com/api/now/table/incident?sysparm_fields=number,sys_id,description,category&sysparm_query=category=hardware",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{domaiName}}",
+						"service-now",
+						"com"
+					],
+					"path": [
+						"api",
+						"now",
+						"table",
+						"incident"
+					],
+					"query": [
+						{
+							"key": "sysparm_limit",
+							"value": "10",
+							"disabled": true
+						},
+						{
+							"key": "sysparm_fields",
+							"value": "number,sys_id,description,category"
+						},
+						{
+							"key": "sysparm_query",
+							"value": "category=hardware"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create_New_Incident",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"var response = pm.response.json();\r",
+							"pm.globals.set(\"sys_id\", response.result.sys_id);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "vW0eDfd+A0V-",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"caller_id\": \"413a4d35eb32010045e1a5115206fe6b\",\r\n    \"short_description\": \"Short Description 2 24/08/2024:10:17AM\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{protocol}}://dev262949.service-now.com/api/now/table/incident",
+					"protocol": "{{protocol}}",
+					"host": [
+						"dev262949",
+						"service-now",
+						"com"
+					],
+					"path": [
+						"api",
+						"now",
+						"table",
+						"incident"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get_All_Chage_Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "vW0eDfd+A0V-",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{protocol}}://dev262949.service-now.com/api/now/table/change_request",
+					"protocol": "{{protocol}}",
+					"host": [
+						"dev262949",
+						"service-now",
+						"com"
+					],
+					"path": [
+						"api",
+						"now",
+						"table",
+						"change_request"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "password",
+			"value": ""
+		}
+	]
+}
