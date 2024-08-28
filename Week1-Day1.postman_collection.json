@@ -96,9 +96,9 @@
 							"        pm.expect(isHardware).to.eql(true);\r",
 							"    }\r",
 							"}); \r",
-							"pm.test(\"Vaildate the size of the software record\", function() {\r",
+							"pm.test(\"Vaildate length of the result\", function() {\r",
 							"    var jsonArray = pm.response.json().result;\r",
-							"    pm.expect(jsonArray.length).greaterThan(1);\r",
+							"    pm.expect(jsonArray.length).to.have.length.eql(11);\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -122,7 +122,7 @@
 					"basic": [
 						{
 							"key": "password",
-							"value": "vW0eDfd+A0V-",
+							"value": "{{password}}",
 							"type": "string"
 						},
 						{
@@ -135,7 +135,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{protocol}}://{{domaiName}}.service-now.com/api/now/table/incident?sysparm_fields=number,sys_id,description,category&sysparm_query=category=hardware",
+					"raw": "{{protocol}}://{{domaiName}}.service-now.com/api/now/table/incident?sysparm_fields=number,sys_id,description,short_description,category&sysparm_query=category=Hardware",
 					"protocol": "{{protocol}}",
 					"host": [
 						"{{domaiName}}",
@@ -151,16 +151,16 @@
 					"query": [
 						{
 							"key": "sysparm_limit",
-							"value": "10",
+							"value": "15",
 							"disabled": true
 						},
 						{
 							"key": "sysparm_fields",
-							"value": "number,sys_id,description,category"
+							"value": "number,sys_id,description,short_description,category"
 						},
 						{
 							"key": "sysparm_query",
-							"value": "category=hardware"
+							"value": "category=Hardware"
 						}
 					]
 				}
@@ -192,7 +192,7 @@
 					"basic": [
 						{
 							"key": "password",
-							"value": "vW0eDfd+A0V-",
+							"value": "{{password}}",
 							"type": "string"
 						},
 						{
@@ -206,7 +206,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"caller_id\": \"413a4d35eb32010045e1a5115206fe6b\",\r\n    \"short_description\": \"Short Description 2 24/08/2024:10:17AM\"\r\n}",
+					"raw": "{\r\n    \"caller_id\": \"413a4d35eb32010045e1a5115206fe6b\",\r\n    \"short_description\": \"Short Description for RAS\",\r\n    \"description\": \"RAS\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -254,7 +254,7 @@
 					"basic": [
 						{
 							"key": "password",
-							"value": "vW0eDfd+A0V-",
+							"value": "{{password}}",
 							"type": "string"
 						},
 						{
