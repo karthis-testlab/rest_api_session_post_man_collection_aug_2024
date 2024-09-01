@@ -98,7 +98,7 @@
 							"}); \r",
 							"pm.test(\"Vaildate length of the result\", function() {\r",
 							"    var jsonArray = pm.response.json().result;\r",
-							"    pm.expect(jsonArray.length).to.have.length.eql(11);\r",
+							"    pm.expect(jsonArray.length).to.have.length.eql(4);\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -135,7 +135,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{protocol}}://{{domaiName}}.service-now.com/api/now/table/incident?sysparm_fields=number,sys_id,description,short_description,category&sysparm_query=category=Hardware",
+					"raw": "{{protocol}}://{{domaiName}}.service-now.com/api/now/table/incident?sysparm_fields=number,sys_id,description,short_description,category,caller_id,opened_at&sysparm_query=caller_id=javascript:gs.getUserID()^active=true^universal_requestISEMPTY",
 					"protocol": "{{protocol}}",
 					"host": [
 						"{{domaiName}}",
@@ -156,11 +156,11 @@
 						},
 						{
 							"key": "sysparm_fields",
-							"value": "number,sys_id,description,short_description,category"
+							"value": "number,sys_id,description,short_description,category,caller_id,opened_at"
 						},
 						{
 							"key": "sysparm_query",
-							"value": "category=Hardware"
+							"value": "caller_id=javascript:gs.getUserID()^active=true^universal_requestISEMPTY"
 						}
 					]
 				}
@@ -214,10 +214,10 @@
 					}
 				},
 				"url": {
-					"raw": "{{protocol}}://dev262949.service-now.com/api/now/table/incident",
+					"raw": "{{protocol}}://{{domaiName}}.service-now.com/api/now/table/incident",
 					"protocol": "{{protocol}}",
 					"host": [
-						"dev262949",
+						"{{domaiName}}",
 						"service-now",
 						"com"
 					],
@@ -276,10 +276,10 @@
 					}
 				},
 				"url": {
-					"raw": "{{protocol}}://dev262949.service-now.com/api/now/table/change_request",
+					"raw": "{{protocol}}://{{domaiName}}.service-now.com/api/now/table/change_request",
 					"protocol": "{{protocol}}",
 					"host": [
-						"dev262949",
+						"{{domaiName}}",
 						"service-now",
 						"com"
 					],

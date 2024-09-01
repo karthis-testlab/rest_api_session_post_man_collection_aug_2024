@@ -1,0 +1,1052 @@
+{
+	"info": {
+		"_postman_id": "b1f42421-ed03-4e5c-942e-40931ef46311",
+		"name": "HomeAssessment-Week2-Day1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28447185"
+	},
+	"item": [
+		{
+			"name": "IncidentTable",
+			"item": [
+				{
+					"name": "Create_OAuth_Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response Time Should be less than 1500ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.below(1500);\r",
+									"});\r",
+									"\r",
+									"var jsonSchema = {\r",
+									"  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\r",
+									"  \"type\": \"object\",\r",
+									"  \"properties\": {\r",
+									"    \"access_token\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"refresh_token\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"scope\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"token_type\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"expires_in\": {\r",
+									"      \"type\": \"integer\"\r",
+									"    }\r",
+									"  },\r",
+									"  \"required\": [\r",
+									"    \"access_token\",\r",
+									"    \"refresh_token\",\r",
+									"    \"scope\",\r",
+									"    \"token_type\",\r",
+									"    \"expires_in\"\r",
+									"  ]\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Validate the JSON schema for the OAuth Token JSON Response\", function (){\r",
+									"    pm.response.to.have.jsonSchema(jsonSchema);\r",
+									"});\r",
+									"\r",
+									"pm.collectionVariables.set(\"token\", pm.response.json().access_token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{clientID}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{clientSecret}}",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{protocol}}://{{instance}}/oauth_token.do",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{instance}}"
+							],
+							"path": [
+								"oauth_token.do"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create_New_Incident",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response Time Should be less than 5sec\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.below(5000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate the value of the urgency as 1\", function () {\r",
+									"    pm.expect(pm.response.json().result.urgency).to.be.eql(\"1\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate the value of the state as 1\", function () {\r",
+									"    pm.expect(pm.response.json().result.state).to.be.eql(\"1\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate the value of the caller id\", function () {\r",
+									"    pm.expect(pm.response.json().result.caller_id.value).to.be.eql(\"5137153cc611227c000bbd1bd8cd2006\");\r",
+									"});\r",
+									"\r",
+									"var response = pm.response.json();\r",
+									"pm.collectionVariables.set(\"sys_id\", response.result.sys_id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"short_description\": \"Stage server say shut down\",\r\n    \"description\": \"Shut Down\",\r\n    \"urgency\": \"1\",\r\n    \"state\": \"1\",\r\n    \"caller_id\": \"5137153cc611227c000bbd1bd8cd2006\"    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{instance}}/{{path}}/:tablename",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{instance}}"
+							],
+							"path": [
+								"{{path}}",
+								":tablename"
+							],
+							"variable": [
+								{
+									"key": "tablename",
+									"value": "incident"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get_A_Single_Incident",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonSchema = {\r",
+									"  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\r",
+									"  \"type\": \"object\",\r",
+									"  \"properties\": {\r",
+									"    \"result\": {\r",
+									"      \"type\": \"object\",\r",
+									"      \"properties\": {\r",
+									"        \"parent\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"made_sla\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"caused_by\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"watch_list\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"upon_reject\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"sys_updated_on\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"child_incidents\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"hold_reason\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"origin_table\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"task_effective_number\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"approval_history\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"number\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"resolved_by\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"sys_updated_by\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"opened_by\": {\r",
+									"          \"type\": \"object\",\r",
+									"          \"properties\": {\r",
+									"            \"link\": {\r",
+									"              \"type\": \"string\"\r",
+									"            },\r",
+									"            \"value\": {\r",
+									"              \"type\": \"string\"\r",
+									"            }\r",
+									"          },\r",
+									"          \"required\": [\r",
+									"            \"link\",\r",
+									"            \"value\"\r",
+									"          ]\r",
+									"        },\r",
+									"        \"user_input\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"sys_created_on\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"sys_domain\": {\r",
+									"          \"type\": \"object\",\r",
+									"          \"properties\": {\r",
+									"            \"link\": {\r",
+									"              \"type\": \"string\"\r",
+									"            },\r",
+									"            \"value\": {\r",
+									"              \"type\": \"string\"\r",
+									"            }\r",
+									"          },\r",
+									"          \"required\": [\r",
+									"            \"link\",\r",
+									"            \"value\"\r",
+									"          ]\r",
+									"        },\r",
+									"        \"state\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"route_reason\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"sys_created_by\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"knowledge\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"order\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"calendar_stc\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"closed_at\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"cmdb_ci\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"delivery_plan\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"contract\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"impact\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"active\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"work_notes_list\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"business_service\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"business_impact\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"priority\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"sys_domain_path\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"rfc\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"time_worked\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"expected_start\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"opened_at\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"business_duration\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"group_list\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"work_end\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"caller_id\": {\r",
+									"          \"type\": \"object\",\r",
+									"          \"properties\": {\r",
+									"            \"link\": {\r",
+									"              \"type\": \"string\"\r",
+									"            },\r",
+									"            \"value\": {\r",
+									"              \"type\": \"string\"\r",
+									"            }\r",
+									"          },\r",
+									"          \"required\": [\r",
+									"            \"link\",\r",
+									"            \"value\"\r",
+									"          ]\r",
+									"        },\r",
+									"        \"reopened_time\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"resolved_at\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"approval_set\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"subcategory\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"work_notes\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"universal_request\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"short_description\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"close_code\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"correlation_display\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"delivery_task\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"work_start\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"assignment_group\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"additional_assignee_list\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"business_stc\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"cause\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"description\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"origin_id\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"calendar_duration\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"close_notes\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"notify\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"service_offering\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"sys_class_name\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"closed_by\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"follow_up\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"parent_incident\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"sys_id\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"contact_type\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"reopened_by\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"incident_state\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"urgency\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"problem_id\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"company\": {\r",
+									"          \"type\": \"object\",\r",
+									"          \"properties\": {\r",
+									"            \"link\": {\r",
+									"              \"type\": \"string\"\r",
+									"            },\r",
+									"            \"value\": {\r",
+									"              \"type\": \"string\"\r",
+									"            }\r",
+									"          }\r",
+									"        },  \r",
+									"        \"reassignment_count\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"activity_due\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"assigned_to\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"severity\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"comments\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"approval\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"sla_due\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"comments_and_work_notes\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"due_date\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"sys_mod_count\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"reopen_count\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"sys_tags\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"escalation\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"upon_approval\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"correlation_id\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"location\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"category\": {\r",
+									"          \"type\": \"string\"\r",
+									"        }\r",
+									"      },\r",
+									"      \"required\": [\r",
+									"        \"parent\",\r",
+									"        \"made_sla\",\r",
+									"        \"caused_by\",\r",
+									"        \"watch_list\",\r",
+									"        \"upon_reject\",\r",
+									"        \"sys_updated_on\",\r",
+									"        \"child_incidents\",\r",
+									"        \"hold_reason\",\r",
+									"        \"origin_table\",\r",
+									"        \"task_effective_number\",\r",
+									"        \"approval_history\",\r",
+									"        \"number\",\r",
+									"        \"resolved_by\",\r",
+									"        \"sys_updated_by\",\r",
+									"        \"opened_by\",\r",
+									"        \"user_input\",\r",
+									"        \"sys_created_on\",\r",
+									"        \"sys_domain\",\r",
+									"        \"state\",\r",
+									"        \"route_reason\",\r",
+									"        \"sys_created_by\",\r",
+									"        \"knowledge\",\r",
+									"        \"order\",\r",
+									"        \"calendar_stc\",\r",
+									"        \"closed_at\",\r",
+									"        \"cmdb_ci\",\r",
+									"        \"delivery_plan\",\r",
+									"        \"contract\",\r",
+									"        \"impact\",\r",
+									"        \"active\",\r",
+									"        \"work_notes_list\",\r",
+									"        \"business_service\",\r",
+									"        \"business_impact\",\r",
+									"        \"priority\",\r",
+									"        \"sys_domain_path\",\r",
+									"        \"rfc\",\r",
+									"        \"time_worked\",\r",
+									"        \"expected_start\",\r",
+									"        \"opened_at\",\r",
+									"        \"business_duration\",\r",
+									"        \"group_list\",\r",
+									"        \"work_end\",\r",
+									"        \"caller_id\",\r",
+									"        \"reopened_time\",\r",
+									"        \"resolved_at\",\r",
+									"        \"approval_set\",\r",
+									"        \"subcategory\",\r",
+									"        \"work_notes\",\r",
+									"        \"universal_request\",\r",
+									"        \"short_description\",\r",
+									"        \"close_code\",\r",
+									"        \"correlation_display\",\r",
+									"        \"delivery_task\",\r",
+									"        \"work_start\",\r",
+									"        \"assignment_group\",\r",
+									"        \"additional_assignee_list\",\r",
+									"        \"business_stc\",\r",
+									"        \"cause\",\r",
+									"        \"description\",\r",
+									"        \"origin_id\",\r",
+									"        \"calendar_duration\",\r",
+									"        \"close_notes\",\r",
+									"        \"notify\",\r",
+									"        \"service_offering\",\r",
+									"        \"sys_class_name\",\r",
+									"        \"closed_by\",\r",
+									"        \"follow_up\",\r",
+									"        \"parent_incident\",\r",
+									"        \"sys_id\",\r",
+									"        \"contact_type\",\r",
+									"        \"reopened_by\",\r",
+									"        \"incident_state\",\r",
+									"        \"urgency\",\r",
+									"        \"problem_id\",\r",
+									"        \"company\",\r",
+									"        \"reassignment_count\",\r",
+									"        \"activity_due\",\r",
+									"        \"assigned_to\",\r",
+									"        \"severity\",\r",
+									"        \"comments\",\r",
+									"        \"approval\",\r",
+									"        \"sla_due\",\r",
+									"        \"comments_and_work_notes\",\r",
+									"        \"due_date\",\r",
+									"        \"sys_mod_count\",\r",
+									"        \"reopen_count\",\r",
+									"        \"sys_tags\",\r",
+									"        \"escalation\",\r",
+									"        \"upon_approval\",\r",
+									"        \"correlation_id\",\r",
+									"        \"location\",\r",
+									"        \"category\"\r",
+									"      ]\r",
+									"    }\r",
+									"  },\r",
+									"  \"required\": [\r",
+									"    \"result\"\r",
+									"  ]\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate the JSON schema\", function () {\r",
+									"    pm.response.to.have.jsonSchema(jsonSchema);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response Time Should be less than 1sec\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.below(1000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate the sys_id key same as value as created\", function () {\r",
+									"    pm.expect(pm.response.json().result.sys_id).to.be.eql(pm.collectionVariables.get(\"sys_id\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{protocol}}://{{instance}}/{{path}}/:tableName/:sys_id",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{instance}}"
+							],
+							"path": [
+								"{{path}}",
+								":tableName",
+								":sys_id"
+							],
+							"variable": [
+								{
+									"key": "tableName",
+									"value": "incident"
+								},
+								{
+									"key": "sys_id",
+									"value": "{{sys_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update_Incident_Record_Using_PUT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response Time Should be less than 2sec\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.below(2000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate short_description are updated correctly\", function () {\r",
+									"    pm.expect(pm.response.json().result.short_description).to.be.eql(\"My Offic PC unable to reboot.\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate description are updated correctly\", function () {\r",
+									"    pm.expect(pm.response.json().result.description).to.be.eql(\"DELL PC\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"short_description\": \"My Offic PC unable to reboot.\",\r\n    \"description\": \"DELL PC\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{instance}}/{{path}}/:tableName/:sys_id",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{instance}}"
+							],
+							"path": [
+								"{{path}}",
+								":tableName",
+								":sys_id"
+							],
+							"variable": [
+								{
+									"key": "tableName",
+									"value": "incident"
+								},
+								{
+									"key": "sys_id",
+									"value": "{{sys_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete_Incident_Record",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 4secs\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(4000);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{protocol}}://{{instance}}/{{path}}/:tableName/:sys_id",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{instance}}"
+							],
+							"path": [
+								"{{path}}",
+								":tableName",
+								":sys_id"
+							],
+							"variable": [
+								{
+									"key": "tableName",
+									"value": "incident"
+								},
+								{
+									"key": "sys_id",
+									"value": "{{sys_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate_Sys_ID_Deleted",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response Time Should be less than 1sec\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.below(1000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code name has Not Found\", function () {\r",
+									"    pm.response.to.have.status(\"Not Found\");\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.test(\"Validate Status Message\", function () {   \r",
+									"    pm.expect(jsonData.status).to.eql(\"failure\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate Error Message\", function () {   \r",
+									"    pm.expect(jsonData.error.message).to.eql(\"No Record found\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{protocol}}://{{instance}}/{{path}}/:tableName/:sys_id",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{instance}}"
+							],
+							"path": [
+								"{{path}}",
+								":tableName",
+								":sys_id"
+							],
+							"variable": [
+								{
+									"key": "tableName",
+									"value": "incident"
+								},
+								{
+									"key": "sys_id",
+									"value": "{{sys_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ChangeRequestTable",
+			"item": [
+				{
+					"name": "Get_All_Chage_Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code name has OK\", function () {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{instance}}/{{path}}/:tablename",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{instance}}"
+							],
+							"path": [
+								"{{path}}",
+								":tablename"
+							],
+							"variable": [
+								{
+									"key": "tablename",
+									"value": "change_request"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "protocol",
+			"value": "https",
+			"type": "string"
+		},
+		{
+			"key": "instance",
+			"value": "dev262949.service-now.com",
+			"type": "string"
+		},
+		{
+			"key": "path",
+			"value": "api/now/table",
+			"type": "string"
+		},
+		{
+			"key": "sys_id",
+			"value": ""
+		},
+		{
+			"key": "password",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "clientID",
+			"value": ""
+		},
+		{
+			"key": "clientSecret",
+			"value": ""
+		}
+	]
+}
