@@ -98,7 +98,7 @@
 							"}); \r",
 							"pm.test(\"Vaildate length of the result\", function() {\r",
 							"    var jsonArray = pm.response.json().result;\r",
-							"    pm.expect(jsonArray.length).to.have.length.eql(4);\r",
+							"    pm.expect(jsonArray.length).to.have.length.eql(10);\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -135,7 +135,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{protocol}}://{{domaiName}}.service-now.com/api/now/table/incident?sysparm_fields=number,sys_id,description,short_description,category,caller_id,opened_at&sysparm_query=caller_id=javascript:gs.getUserID()^active=true^universal_requestISEMPTY",
+					"raw": "{{protocol}}://{{domaiName}}.service-now.com/api/now/table/incident?sysparm_fields=number,sys_id,description,short_description,category,caller_id,opened_at&sysparm_query=category=hardware",
 					"protocol": "{{protocol}}",
 					"host": [
 						"{{domaiName}}",
@@ -160,7 +160,7 @@
 						},
 						{
 							"key": "sysparm_query",
-							"value": "caller_id=javascript:gs.getUserID()^active=true^universal_requestISEMPTY"
+							"value": "category=hardware"
 						}
 					]
 				}
@@ -238,7 +238,9 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							""
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
 						],
 						"type": "text/javascript",
 						"packages": {}
