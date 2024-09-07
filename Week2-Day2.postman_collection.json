@@ -71,7 +71,7 @@
 			"response": []
 		},
 		{
-			"name": "Get_A_Incident_Using_Query Copy",
+			"name": "Get_A_Incident_Using_Query_Category",
 			"event": [
 				{
 					"listen": "test",

@@ -16,6 +16,7 @@
 							"pm.test(\"Status code is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
+							"// var, let and const\r",
 							"pm.test(\"Vaildate we're getting only hardware category\", function () {\r",
 							"    var jsonArray = pm.response.json().result;\r",
 							"    var isHardware = false;   \r",
@@ -24,13 +25,14 @@
 							"        console.log(jsonArray[i].number);\r",
 							"        if(jsonArray[i].category === \"Hardware\" || jsonArray[i].category === \"hardware\") {\r",
 							"            isHardware = true;\r",
-							"        }\r",
-							"        pm.expect(isHardware).to.eql(true);\r",
+							"        }       \r",
 							"    }\r",
+							"    pm.expect(isHardware).to.eql(true);\r",
 							"}); \r",
 							"pm.test(\"Vaildate the size of the software record\", function() {\r",
 							"    var jsonArray = pm.response.json().result;\r",
 							"    pm.expect(jsonArray.length).greaterThan(1);\r",
+							"    pm.expect(jsonArray.length).to.be.eql(15);\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -54,7 +56,7 @@
 					"basic": [
 						{
 							"key": "password",
-							"value": "vW0eDfd+A0V-",
+							"value": "{{password}}",
 							"type": "string"
 						},
 						{
@@ -67,7 +69,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{protocol}}://{{domaiName}}.service-now.com/api/now/table/incident?sysparm_limit=15&sysparm_fields=number,sys_id,description,short_description,category&sysparm_query=short_descriptionENDSWITHRAS^description=RAS",
+					"raw": "{{protocol}}://{{domaiName}}.service-now.com/api/now/table/incident?sysparm_fields=number,sys_id,description,short_description,category&sysparm_query=short_descriptionENDSWITHRAS^description=RAS",
 					"protocol": "{{protocol}}",
 					"host": [
 						"{{domaiName}}",
@@ -83,7 +85,8 @@
 					"query": [
 						{
 							"key": "sysparm_limit",
-							"value": "15"
+							"value": "15",
+							"disabled": true
 						},
 						{
 							"key": "sysparm_fields",
@@ -547,11 +550,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "bearer",
-					"bearer": [
+					"type": "basic",
+					"basic": [
 						{
-							"key": "token",
-							"value": "g7eIBiBHE4BLF3xP0AKd2_S4Ok4Eq2DbiiJ8FxDGRwOpnAkw_xFGwxdJIBseJuCGOYKgGc98lUleaA18IIVrDg",
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
 							"type": "string"
 						}
 					]
@@ -625,11 +633,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "bearer",
-					"bearer": [
+					"type": "basic",
+					"basic": [
 						{
-							"key": "token",
-							"value": "g7eIBiBHE4BLF3xP0AKd2_S4Ok4Eq2DbiiJ8FxDGRwOpnAkw_xFGwxdJIBseJuCGOYKgGc98lUleaA18IIVrDg",
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
 							"type": "string"
 						}
 					]
@@ -820,7 +833,7 @@
 			"response": []
 		},
 		{
-			"name": "Delete_Incident_Record Copy",
+			"name": "Delete_Incident_Record_Validation",
 			"request": {
 				"auth": {
 					"type": "basic",
@@ -872,19 +885,7 @@
 			"name": "Create_OAuth_Token",
 			"request": {
 				"auth": {
-					"type": "oauth2",
-					"oauth2": [
-						{
-							"key": "grant_type",
-							"value": "password_credentials",
-							"type": "string"
-						},
-						{
-							"key": "addTokenTo",
-							"value": "header",
-							"type": "string"
-						}
-					]
+					"type": "noauth"
 				},
 				"method": "POST",
 				"header": [],
@@ -898,12 +899,12 @@
 						},
 						{
 							"key": "client_id",
-							"value": "c91a806ab7981210dcb0a51cb42164af",
+							"value": "{{clientID}}",
 							"type": "text"
 						},
 						{
 							"key": "client_secret",
-							"value": "~1E)cj#]`+",
+							"value": "{{clientSecret}}",
 							"type": "text"
 						},
 						{
@@ -913,7 +914,7 @@
 						},
 						{
 							"key": "password",
-							"value": "vW0eDfd+A0V-",
+							"value": "{{password}}",
 							"type": "text"
 						}
 					]
@@ -959,6 +960,16 @@
 	"variable": [
 		{
 			"key": "password",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "clientID",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "clientSecret",
 			"value": "",
 			"type": "string"
 		}

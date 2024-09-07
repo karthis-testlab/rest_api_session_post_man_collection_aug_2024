@@ -45,7 +45,7 @@
 					"basic": [
 						{
 							"key": "password",
-							"value": "vW0eDfd+A0V-",
+							"value": "{{password}}",
 							"type": "string"
 						},
 						{
@@ -85,6 +85,35 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "password",
+			"value": "",
+			"type": "string"
 		}
 	]
 }
