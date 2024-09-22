@@ -1,0 +1,192 @@
+{
+	"info": {
+		"_postman_id": "8489140d-b798-462b-9702-908ab5a583a7",
+		"name": "UIBank_API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28447185"
+	},
+	"item": [
+		{
+			"name": "Create_Account",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "B8JY7DtCNAeRMCcTjxEfI1CmkWM7UgiIYUhKe39hERKblIkARAkfAdaHMPYOQbK4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"friendlyName\": \"Test Challenge\",\r\n    \"type\": \"checking\",\r\n    \"userId\": \"64290731ba9f8a0047adacfc\",\r\n    \"balance\": 100,\r\n    \"accountNumber\": 43503704\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://uibank-api.azurewebsites.net/api/accounts",
+					"protocol": "https",
+					"host": [
+						"uibank-api",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Filter_Account",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "B8JY7DtCNAeRMCcTjxEfI1CmkWM7UgiIYUhKe39hERKblIkARAkfAdaHMPYOQbK4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://uibank-api.azurewebsites.net/api/accounts?filter[where][friendlyName]=Test Challenge",
+					"protocol": "https",
+					"host": [
+						"uibank-api",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"accounts"
+					],
+					"query": [
+						{
+							"key": "filter[where][friendlyName]",
+							"value": "Test Challenge"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create_Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"FebApiuser\",\r\n    \"password\": \"Eagle@123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://uibank-api.azurewebsites.net/api/users/login",
+					"protocol": "https",
+					"host": [
+						"uibank-api",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://uibank-api.azurewebsites.net/api/accounts?filter[where][userId]=64290731ba9f8a0047adacfc",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "5dciZvAMR3eRfBDtGBH02pPyBXYbQS0j513BK8PxPXAnkNNII8JBaQlS01w8aIFf",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://uibank-api.azurewebsites.net/api/accounts?filter[where][userId]=64290731ba9f8a0047adacfc",
+					"protocol": "https",
+					"host": [
+						"uibank-api",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"accounts"
+					],
+					"query": [
+						{
+							"key": "filter[where][userId]",
+							"value": "64290731ba9f8a0047adacfc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://uibank-api.azurewebsites.net/api/users/",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"karthike.selene1@gmail.com\",\r\n    \"password\": \"Test@123\",\r\n    \"gender\": \"male\",\r\n    \"title\": \"mrs\",\r\n    \"employmentStatus\": \"Full-time\",\r\n    \"maritalStatus\": \"Married\",\r\n    \"username\": \"adminuser\",\r\n    \"type\": \"customer\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://uibank-api.azurewebsites.net/api/users/",
+					"protocol": "https",
+					"host": [
+						"uibank-api",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"users",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
